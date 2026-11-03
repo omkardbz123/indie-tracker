@@ -34,7 +34,8 @@ To try the caretaker portal locally: Admin → Caretakers → Add caretaker → 
 ## Hosting on Cloudflare Pages (from GitHub)
 1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick `omkardbz123/indie-tracker`.
 2. Project name `indie-tracker` · Production branch `main` · Framework preset **None** · Build command *(empty)* · Build output directory `public`.
-3. The D1 binding (`DB` → database `dog-qr-id`) comes from `wrangler.toml`. Every push to `main` redeploys.
+3. The D1 binding (`DB` → database `indie-tracker`) comes from `wrangler.toml`. Every push to `main` redeploys.
+   The Pages project must be in the same Cloudflare account as the database (omkardbz123@gmail.com's Account).
 4. Database changes: add a file in `migrations/`, then run `npm run db:migrate:remote`.
 
 ## Admin login (Cloudflare Access): required before `/admin` works in production

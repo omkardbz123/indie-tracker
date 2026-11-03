@@ -4,8 +4,8 @@ compatibility_date = "2025-01-01"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "dog-qr-id"
-database_id = "02774996-a272-45bc-946a-7ed02479b50e"
+database_name = "indie-tracker"
+database_id = "d3779f40-9657-4fd9-8fd6-f67854ce8215"
 migrations_dir = "migrations"
 
 # Photo storage (R2) is not set up yet. Photo upload stays hidden until this is enabled:

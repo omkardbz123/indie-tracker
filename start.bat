@@ -23,7 +23,7 @@ if not exist node_modules (
 )
 
 echo Preparing local database...
-call npx wrangler d1 migrations apply dog-qr-id --local <nul >nul
+call npx wrangler d1 migrations apply indie-tracker --local <nul >nul
 if errorlevel 1 (
   echo Could not set up the local database.
   pause
