@@ -2,99 +2,146 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#ffffff">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="/favicon.svg">
 <title>Send a message · Dog ID</title>
 <style>
-:root{--text:#111827;--text-2:#374151;--muted:#6b7280;--border:#e5e7eb;--border-2:#d1d5db;--soft:#f3f4f6;--red:#b91c1c}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:#f3f4f6;color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+:root{--text:#111827;--text-2:#374151;--muted:#6b7280;--border:#e5e7eb;--border-2:#d1d5db;--soft:#f3f4f6;--bubble:#f1f2f4;--red:#b91c1c;--green:#16a34a}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#eef0f3;color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
 [hidden]{display:none!important}
-.page{max-width:560px;margin:0 auto;min-height:100vh;background:#fff;display:flex;flex-direction:column}
-@media (min-width:561px){.page{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border)}
-.wordmark{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--text);text-decoration:none}
-.mark{width:22px;height:22px;border-radius:5px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
-.back{font-size:14px;color:var(--text-2);text-decoration:none}.back:hover{text-decoration:underline}
-.intro{padding:20px 20px 16px}
-.label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
-h1{font-size:24px;line-height:1.25;font-weight:700;margin:6px 0 0;overflow-wrap:anywhere}
-.callout{margin:0 20px;padding:12px 14px;border-left:3px solid var(--text);background:#f9fafb;color:var(--text-2);font-size:15px}
-.form{padding:20px}
-.quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.quick button{height:34px;padding:0 12px;border:1px solid var(--border-2);border-radius:999px;background:#fff;color:var(--text);font:inherit;font-size:14px;cursor:pointer}
-.quick button:hover{background:#f9fafb}
-label.field{display:block;margin-bottom:14px}
-label.field>span{display:block;font-size:14px;font-weight:500;color:var(--text-2);margin-bottom:6px}
-input[type=text],textarea{width:100%;border:1px solid var(--border-2);border-radius:8px;padding:10px 12px;font:inherit;color:var(--text);background:#fff}
-textarea{resize:vertical;min-height:110px;line-height:1.5}
-input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
-.check{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:15px;cursor:pointer}
-.check input{width:18px;height:18px;margin:0;accent-color:var(--text)}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border:0;border-radius:8px;background:var(--text);color:#fff;font:inherit;font-weight:600;cursor:pointer}
-.btn:disabled{opacity:.6;cursor:default}
-.err{color:var(--red);font-size:14px;font-weight:500;margin:10px 0 0}.err:empty{display:none}
-.thread{flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:85%;padding:10px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
-.msg .who{display:block;font-size:12px;font-weight:600;margin-bottom:2px;opacity:.75}
-.msg .when{display:block;font-size:11px;margin-top:4px;opacity:.6}
-.msg.me{align-self:flex-end;background:var(--text);color:#fff;border-bottom-right-radius:3px}
-.msg.them{align-self:flex-start;background:var(--soft);border-bottom-left-radius:3px}
-.msg a{color:inherit}
-.waiting{color:var(--muted);font-size:14px;text-align:center;margin:8px 0}
-.save{margin:0 20px 12px;font-size:13px;color:var(--muted);text-align:center}
-.save button{border:0;background:none;color:var(--text);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
-.composer{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--border);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end}
-.composer textarea{min-height:44px;max-height:140px;height:44px;padding:10px 12px}
-.composer .send{width:auto;height:44px;padding:0 18px;flex:none}
-.loc{flex:none;width:44px;height:44px;border:1px solid var(--border-2);border-radius:8px;background:#fff;color:var(--text);display:grid;place-items:center;cursor:pointer}
-.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.notice{padding:48px 24px;text-align:center;color:var(--muted)}
+button{font:inherit;color:inherit}
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* App shell: header and composer stay put, only the middle scrolls */
+.app{max-width:640px;height:100vh;height:100dvh;margin:0 auto;background:#fff;display:flex;flex-direction:column}
+@media (min-width:641px){.app{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
+.head{flex:none;display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));border-bottom:1px solid var(--border);background:#fff}
+.back{width:36px;height:36px;margin-left:-8px;border-radius:50%;display:grid;place-items:center;color:var(--text);text-decoration:none}
+.back:hover{background:var(--soft)}
+.av{width:38px;height:38px;flex:none;border-radius:50%;background:var(--text);color:#fff;display:grid;place-items:center;font-weight:600}
+.head-text{min-width:0}
+.head-text b{display:block;font-size:16px;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.head-text span{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--muted)}
+.head-text span .i{width:13px;height:13px}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+/* Start screen */
+.start{padding:28px 20px 32px}
+.start h1{font-size:24px;line-height:1.25;margin:0 0 8px;overflow-wrap:anywhere}
+.start .lead{margin:0 0 20px;color:var(--text-2)}
+.privacy{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;margin-bottom:22px;border-radius:12px;background:var(--soft);color:var(--text-2);font-size:14px}
+.privacy .i{width:18px;height:18px;margin-top:1px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chips button{height:36px;padding:0 14px;border:1px solid var(--border-2);border-radius:999px;background:#fff;font-size:14px;cursor:pointer}
+.chips button:hover{background:var(--soft)}
+.field{display:block;margin-bottom:16px}
+.field>span{display:block;font-size:14px;font-weight:500;color:var(--text-2);margin-bottom:6px}
+.field input,.field textarea{width:100%;border:1px solid var(--border-2);border-radius:12px;padding:12px 14px;font:inherit;color:var(--text);background:#fff}
+.field textarea{resize:none;min-height:120px;line-height:1.5}
+.field input:focus,.field textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.check{display:flex;align-items:center;gap:10px;margin-bottom:22px;font-size:15px;cursor:pointer}
+.check input{width:20px;height:20px;margin:0;accent-color:var(--text)}
+.primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border:0;border-radius:12px;background:var(--text);color:#fff;font-weight:600;cursor:pointer}
+.primary:disabled{opacity:.6;cursor:default}
+.err{color:var(--red);font-size:14px;font-weight:500;margin:12px 0 0}.err:empty{display:none}
+
+/* Thread */
+.thread{padding:12px 14px 8px;display:flex;flex-direction:column}
+.sys{align-self:center;display:flex;align-items:center;gap:6px;max-width:92%;margin:6px 0 14px;padding:6px 12px;border-radius:999px;background:var(--soft);color:var(--muted);font-size:12px;text-align:center}
+.sys .i{width:13px;height:13px}
+.day{align-self:center;margin:12px 0 8px;font-size:12px;font-weight:500;color:var(--muted)}
+.from{font-size:12px;font-weight:600;color:var(--muted);margin:8px 0 4px 4px}
+.msg{max-width:80%;padding:9px 13px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:2px}
+.msg.me{align-self:flex-end;background:var(--text);color:#fff}
+.msg.them{align-self:flex-start;background:var(--bubble)}
+.msg.me.last{border-bottom-right-radius:6px}
+.msg.them.last{border-bottom-left-radius:6px}
+.msg.pending{opacity:.6}
+.meta{font-size:11px;color:var(--muted);margin:4px 6px 6px}
+.meta.me{align-self:flex-end}
+.meta.them{align-self:flex-start}
+.loc{display:flex;align-items:center;gap:10px;margin-top:6px;padding:10px 12px;border-radius:12px;text-decoration:none;color:inherit;background:rgba(255,255,255,.12)}
+.msg.them .loc{background:#fff;border:1px solid var(--border)}
+.loc .i{width:22px;height:22px}
+.loc b{display:block;font-size:14px;font-weight:600}
+.loc small{display:block;font-size:12px;opacity:.75}
+.msg .loc:first-child{margin-top:0}
+.waiting{align-self:center;display:flex;align-items:center;gap:8px;margin:14px 0 6px;font-size:13px;color:var(--muted)}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite both}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+/* Composer */
+.foot{flex:none;border-top:1px solid var(--border);background:#fff;padding:8px 12px calc(10px + env(safe-area-inset-bottom))}
+.tip{margin:0 0 8px;font-size:12px;color:var(--muted);text-align:center}
+.tip button{border:0;background:none;padding:0;color:var(--text);font-size:12px;font-weight:500;text-decoration:underline;cursor:pointer}
+.composer{display:flex;align-items:flex-end;gap:8px}
+.round{width:44px;height:44px;flex:none;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+.round.ghost{background:var(--soft);color:var(--text)}
+.round.ghost:hover{background:#e5e7eb}
+.round.send{background:var(--text);color:#fff}
+.round:disabled{opacity:.4;cursor:default}
+.input{flex:1;min-width:0;display:flex;align-items:flex-end;min-height:44px;background:var(--soft);border-radius:22px;border:1px solid transparent}
+.input:focus-within{background:#fff;border-color:var(--border-2)}
+.input textarea{flex:1;min-width:0;height:42px;max-height:132px;padding:10px 16px;border:0;outline:0;background:transparent;resize:none;overflow-y:hidden;font:inherit;color:var(--text);line-height:22px}
+.notice{padding:64px 24px;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.dots i{animation:none;opacity:.6}}
 </style>
 </head>
 <body>
-<div class="page">
-  <header class="topbar">
-    <a class="wordmark" href="/"><span class="mark">D</span>Dog ID</a>
-    <a class="back" id="back" href="/">Back to profile</a>
+<div class="app">
+  <header class="head">
+    <a class="back" id="back" href="/" aria-label="Back to profile"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
+    <span class="av" id="av" aria-hidden="true">D</span>
+    <div class="head-text">
+      <b id="hdName">Dog ID</b>
+      <span id="hdSub"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><em style="font-style:normal" id="hdRole">Anonymous chat</em></span>
+    </div>
   </header>
 
-  <div id="loading" class="notice">Loading…</div>
-  <div id="missing" class="notice" hidden>This dog isn't registered, or the link is incomplete.</div>
+  <main class="scroll" id="scroll">
+    <div id="loading" class="notice">Loading…</div>
+    <div id="missing" class="notice" hidden>This dog isn't registered, or the link is incomplete.</div>
 
-  <div id="main" hidden>
-    <div class="intro">
-      <p class="label">Anonymous message</p>
-      <h1 id="title">Message the caretaker</h1>
-    </div>
-    <p class="callout" id="privacy"></p>
-  </div>
-
-  <form class="form" id="start" hidden novalidate>
-    <div class="quick" id="quick">
-      <button type="button">I found this dog</button>
-      <button type="button">This dog looks lost</button>
-      <button type="button">This dog looks injured or unwell</button>
-    </div>
-    <label class="field"><span>Message</span><textarea id="body" maxlength="1000" placeholder="Where did you see the dog? Is it safe with you?"></textarea></label>
-    <label class="field"><span>Your name (optional)</span><input type="text" id="fname" maxlength="40" autocomplete="off" placeholder="So they know what to call you"></label>
-    <label class="check"><input type="checkbox" id="withLoc">Include my current location</label>
-    <button class="btn" id="send" type="submit">Send message</button>
-    <p class="err" id="err"></p>
-  </form>
-
-  <div id="convo" hidden style="display:flex;flex-direction:column;flex:1">
-    <div class="thread" id="thread"></div>
-    <p class="save">Replies appear here. To come back later, keep this page open or <button type="button" id="copyLink">copy your private link</button>.</p>
-    <form class="composer" id="composer" novalidate>
-      <button type="button" class="loc" id="locBtn" title="Send my location" aria-label="Send my location"><svg class="i" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></button>
-      <textarea id="reply" maxlength="1000" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
-      <button class="btn send" type="submit">Send</button>
+    <form class="start" id="start" hidden novalidate>
+      <h1 id="title">Send a message</h1>
+      <p class="lead" id="lead"></p>
+      <div class="privacy">
+        <svg class="i" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>This chat is anonymous. You won't see their phone number and they won't see yours. Don't share personal details unless you want to.</span>
+      </div>
+      <div class="chips" id="quick">
+        <button type="button">I found this dog</button>
+        <button type="button">This dog looks lost</button>
+        <button type="button">This dog looks injured or unwell</button>
+      </div>
+      <label class="field"><span>Message</span><textarea id="body" maxlength="1000" placeholder="Where is the dog now? Is it safe with you?"></textarea></label>
+      <label class="field"><span>Your name (optional)</span><input type="text" id="fname" maxlength="40" autocomplete="off" placeholder="So they know what to call you"></label>
+      <label class="check"><input type="checkbox" id="withLoc">Include my current location</label>
+      <button class="primary" id="send" type="submit">Send message</button>
+      <p class="err" id="err"></p>
     </form>
-  </div>
+
+    <section class="thread" id="convo" hidden aria-live="polite">
+      <div class="sys"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Anonymous chat. Phone numbers stay hidden on both sides.</div>
+      <div id="thread" style="display:flex;flex-direction:column"></div>
+    </section>
+  </main>
+
+  <footer class="foot" id="foot" hidden>
+    <p class="tip">Replies show up here. <button type="button" id="copyLink">Copy private link</button> to return later.</p>
+    <form class="composer" id="composer" novalidate>
+      <button type="button" class="round ghost" id="locBtn" title="Share my location" aria-label="Share my location"><svg class="i" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></button>
+      <div class="input"><textarea id="reply" maxlength="1000" rows="1" placeholder="Message" aria-label="Message"></textarea></div>
+      <button class="round send" type="submit" id="sendBtn" aria-label="Send" disabled><svg class="i" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+    </form>
+  </footer>
 </div>
 
 <script>
@@ -102,24 +149,28 @@ input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3p
   var $ = function (s) { return document.getElementById(s); };
   var params = new URLSearchParams(location.search);
   var dogId = params.get("dog") || "";
-  var conv = null; // { id, token }
+  var conv = null;      // { id, token }
   var dog = null;
-  var lastCount = -1;
+  var messages = [];    // confirmed + pending
+  var lastSignature = "";
+  var MAP_RE = /https:\/\/maps\.google\.com\/\?q=(-?[\d.]+),(-?[\d.]+)/;
+  var PIN = '<svg class="i" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>';
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
-  // Only map links become clickable, so nobody can slip a phishing link into the thread.
-  function linkify(s) {
-    return esc(s).replace(/https:\/\/maps\.google\.com\/\?q=-?[\d.]+,-?[\d.]+/g, function (u) {
-      return '<a href="' + u + '" target="_blank" rel="noopener">View location on map</a>';
-    });
-  }
-  function when(ts) {
-    var d = new Date(ts.replace(" ", "T") + "Z");
-    return d.toLocaleString([], { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function parseTs(ts) { return ts instanceof Date ? ts : new Date(ts.replace(" ", "T") + "Z"); }
+  function timeOf(d) { return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); }
+  function dayLabel(d) {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var that = new Date(d); that.setHours(0, 0, 0, 0);
+    var diff = Math.round((today - that) / 86400000);
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Yesterday";
+    return d.toLocaleDateString([], { day: "numeric", month: "short", year: that.getFullYear() === today.getFullYear() ? undefined : "numeric" });
   }
   function store(key, value) {
     try {
@@ -146,41 +197,76 @@ input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3p
       }, function () { resolve(""); }, { timeout: 10000, maximumAge: 60000 });
     });
   }
+  function scrollToEnd() { var s = $("scroll"); s.scrollTop = s.scrollHeight; }
+  function nearEnd() { var s = $("scroll"); return s.scrollTop + s.clientHeight >= s.scrollHeight - 120; }
 
+  // ---------- header ----------
+  function roleWord() { return dog && dog.dog_type === "community" ? "caretaker" : "owner"; }
   function showDog(d) {
     dog = d;
-    var role = d.dog_type === "community" ? "caretaker" : "owner";
-    document.title = "Message about " + d.name + " · Dog ID";
-    $("title").textContent = "Message the " + role + " of " + d.name;
-    $("privacy").textContent = "Your message goes straight to " + d.name + "'s " + role +
-      ". Neither of you can see the other's phone number. Please don't share personal details unless you want to.";
+    var name = cap(d.name);
+    document.title = "Message about " + name + " · Dog ID";
+    $("av").textContent = name.charAt(0);
+    $("hdName").textContent = name;
+    $("hdRole").textContent = "Anonymous chat with the " + roleWord();
+    $("title").textContent = "Message " + name + "'s " + roleWord();
+    $("lead").textContent = "Let them know where you saw " + name + ". Replies will appear on this page.";
     $("back").href = "/d/" + d.id;
     $("loading").hidden = true;
-    $("main").hidden = false;
   }
 
-  function renderThread(data) {
-    if (data.messages.length === lastCount) return;
-    var atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
-    lastCount = data.messages.length;
-    var role = dog && dog.dog_type === "community" ? "Caretaker" : "Owner";
-    var html = data.messages.map(function (m) {
+  // ---------- thread ----------
+  // Only Google Maps links become clickable, shown as a location card.
+  function bodyHtml(text) {
+    var m = text.match(MAP_RE);
+    if (!m) return esc(text);
+    var rest = text.replace(m[0], "").replace(/My location:\s*$/m, "").trim();
+    return (rest ? esc(rest) + "\n" : "") +
+      '<a class="loc" href="' + m[0] + '" target="_blank" rel="noopener">' + PIN +
+      "<span><b>Location shared</b><small>Open in Google Maps</small></span></a>";
+  }
+
+  function render() {
+    var stick = nearEnd();
+    var other = cap(roleWord());
+    var html = "";
+    var prevDay = "";
+    for (var i = 0; i < messages.length; i++) {
+      var m = messages[i];
       var mine = m.sender === "finder";
-      var who = mine ? "You" : m.sender === "admin" ? "Volunteer team" : role;
-      return '<div class="msg ' + (mine ? "me" : "them") + '"><span class="who">' + who + "</span>" +
-        linkify(m.body) + '<span class="when">' + when(m.created_at) + "</span></div>";
-    }).join("");
-    var last = data.messages[data.messages.length - 1];
-    if (last && last.sender === "finder") html += '<p class="waiting">Waiting for a reply. You can leave this page open.</p>';
+      var at = parseTs(m.created_at);
+      var day = dayLabel(at);
+      var prev = messages[i - 1];
+      var next = messages[i + 1];
+      // A group is consecutive messages from the same sender within 5 minutes on the same day.
+      var sameAsPrev = prev && prev.sender === m.sender && day === prevDay && at - parseTs(prev.created_at) < 300000;
+      var sameAsNext = next && next.sender === m.sender && dayLabel(parseTs(next.created_at)) === day && parseTs(next.created_at) - at < 300000;
+      if (day !== prevDay) { html += '<div class="day">' + day + "</div>"; prevDay = day; }
+      if (!mine && !sameAsPrev) html += '<div class="from">' + (m.sender === "admin" ? "Volunteer team" : other) + "</div>";
+      html += '<div class="msg ' + (mine ? "me" : "them") + (sameAsNext ? "" : " last") + (m.pending ? " pending" : "") + '">' + bodyHtml(m.body) + "</div>";
+      if (!sameAsNext) {
+        html += '<div class="meta ' + (mine ? "me" : "them") + '">' +
+          (m.pending ? "Sending…" : timeOf(at) + (mine && i === messages.length - 1 ? " · Sent" : "")) + "</div>";
+      }
+    }
+    var last = messages[messages.length - 1];
+    if (last && last.sender === "finder" && !last.pending) {
+      html += '<div class="waiting"><span class="dots"><i></i><i></i><i></i></span>Waiting for the ' + roleWord() + " to reply</div>";
+    }
     $("thread").innerHTML = html;
-    if (atBottom) window.scrollTo(0, document.body.scrollHeight);
+    if (stick) scrollToEnd();
   }
 
   function refresh() {
     if (!conv || document.hidden) return;
     api("/api/chat/" + conv.id).then(function (data) {
       if (!dog) showDog(data.dog);
-      renderThread(data);
+      var sig = data.messages.length + ":" + (data.messages.length ? data.messages[data.messages.length - 1].id : "");
+      var pending = messages.filter(function (m) { return m.pending; });
+      if (sig === lastSignature && !pending.length) return;
+      lastSignature = sig;
+      messages = data.messages.concat(pending);
+      render();
     }).catch(function (e) {
       if (e.status === 404) { conv = null; store("dogid-chat:" + dogId, null); location.reload(); }
     });
@@ -189,11 +275,31 @@ input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3p
   function openConversation() {
     $("start").hidden = true;
     $("convo").hidden = false;
+    $("foot").hidden = false;
     refresh();
     setInterval(refresh, 5000);
     document.addEventListener("visibilitychange", refresh);
+    setTimeout(scrollToEnd, 50);
   }
 
+  function send(text) {
+    var temp = { sender: "finder", body: text, created_at: new Date(), pending: true };
+    messages.push(temp);
+    render();
+    scrollToEnd();
+    return api("/api/chat/" + conv.id + "/messages", { method: "POST", body: JSON.stringify({ body: text }) })
+      .then(function () {
+        messages.splice(messages.indexOf(temp), 1);
+        lastSignature = "";
+        refresh();
+      }, function (err) {
+        messages.splice(messages.indexOf(temp), 1);
+        render();
+        throw err;
+      });
+  }
+
+  // ---------- start-up ----------
   // A private link (#<conversationId>.<token>) lets the finder come back from another device.
   var fromHash = location.hash.slice(1).split(".");
   if (fromHash.length === 2 && fromHash[0] && fromHash[1]) {
@@ -218,6 +324,7 @@ input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3p
     $("missing").hidden = false;
   });
 
+  // ---------- start form ----------
   $("quick").onclick = function (e) {
     if (e.target.tagName !== "BUTTON") return;
     var body = $("body");
@@ -249,33 +356,50 @@ input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3p
     });
   };
 
-  function send(text) {
-    return api("/api/chat/" + conv.id + "/messages", { method: "POST", body: JSON.stringify({ body: text }) })
-      .then(function () { lastCount = -1; refresh(); window.scrollTo(0, document.body.scrollHeight); });
+  // ---------- composer ----------
+  var box = $("reply");
+  function fit() {
+    box.style.height = "42px";
+    box.style.height = Math.min(box.scrollHeight, 132) + "px";
+    box.style.overflowY = box.scrollHeight > 132 ? "auto" : "hidden";
+    $("sendBtn").disabled = !box.value.trim();
   }
+  box.addEventListener("input", fit);
+  // Enter sends on computers; on phones Enter makes a new line and the send button sends.
+  box.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey && matchMedia("(pointer: fine)").matches) {
+      e.preventDefault();
+      $("composer").requestSubmit();
+    }
+  });
 
   $("composer").onsubmit = function (e) {
     e.preventDefault();
-    var box = $("reply");
     var text = box.value.trim();
     if (!text) return;
-    box.disabled = true;
-    send(text).then(function () { box.value = ""; }).catch(function (err) { alert(err.message); })
-      .then(function () { box.disabled = false; box.focus(); });
+    box.value = "";
+    fit();
+    send(text).catch(function (err) {
+      box.value = text;
+      fit();
+      alert(err.message);
+    });
+    box.focus();
   };
 
   $("locBtn").onclick = function () {
     var b = this;
     b.disabled = true;
     getLocation().then(function (loc) {
-      if (!loc) { alert("Couldn't get your location. Check that location access is allowed."); return; }
+      if (!loc) { alert("Couldn't get your location. Check that location access is allowed for this site."); return; }
       return send(loc);
     }).catch(function (err) { alert(err.message); }).then(function () { b.disabled = false; });
   };
 
   $("copyLink").onclick = function () {
     var link = location.origin + "/chat/?dog=" + dogId + "#" + conv.id + "." + conv.token;
-    var done = function () { $("copyLink").textContent = "link copied. Keep it private"; };
+    var btn = this;
+    var done = function () { btn.textContent = "Link copied, keep it private"; };
     if (navigator.clipboard) navigator.clipboard.writeText(link).then(done, function () { prompt("Copy this private link:", link); });
     else prompt("Copy this private link:", link);
   };
