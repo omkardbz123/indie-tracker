@@ -1,4 +1,4 @@
-import { validId } from "../_lib/util.js";
+import { validId } from "../lib/util.js";
 
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);

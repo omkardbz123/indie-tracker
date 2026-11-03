@@ -1,6 +1,11 @@
 name = "indie-tracker"
-pages_build_output_dir = "public"
+main = "src/worker.js"
 compatibility_date = "2025-01-01"
+
+# Pages and static files (admin dashboard, chat page, etc.) are served straight from /public.
+[assets]
+directory = "public"
+binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB"
@@ -15,4 +20,4 @@ migrations_dir = "migrations"
 # binding = "PHOTOS"
 # bucket_name = "dog-photos"
 
-# Set ACCESS_TEAM_DOMAIN and ACCESS_AUD as Pages secrets (see README).
+# Set ACCESS_TEAM_DOMAIN and ACCESS_AUD as Worker secrets (see README).

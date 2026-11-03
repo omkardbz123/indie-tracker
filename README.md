@@ -9,15 +9,15 @@ other's phone number.
   download QR tags and answer messages about their dogs.
 - **Admins**: `/admin/` (protected by Cloudflare Access). They manage all dogs and caretakers and can read and reply to every conversation.
 
-Stack: Cloudflare Pages + Pages Functions, D1 (SQLite), Cloudflare Access. R2 photo storage is optional and currently **off**.
+Stack: a Cloudflare Worker with static assets, D1 (SQLite), Cloudflare Access. R2 photo storage is optional and currently **off**.
 
 ## Layout
-- `functions/d/[id].js`: public profile (only dog details, never contact info)
-- `functions/api/chat/**`: public anonymous chat (finder holds a secret token; only its hash is stored)
-- `functions/api/admin/**`: admin API, guarded by `_middleware.js` (verifies the Cloudflare Access JWT)
-- `functions/api/my/**`: caretaker API, guarded by `_middleware.js` (session cookie from the login link)
-- `functions/api/auth/login.js`: exchanges a login-link token for the session cookie
-- `functions/_lib/`: shared data access (`store.js`), chat logic, handlers, validation
+- `src/worker.js`: entry point and URL routing (files in `public/` are served directly)
+- `src/routes/profile.js`: public profile `/d/<id>` (only dog details, never contact info)
+- `src/routes/public.js`: dog JSON, anonymous chat (the finder holds a secret token; only its hash is stored), caretaker login
+- `src/routes/caretakers.js`: admin-only caretaker management
+- `src/lib/middleware.js`: guards for `/api/admin/*` (Cloudflare Access JWT) and `/api/my/*` (caretaker session cookie)
+- `src/lib/`: shared data access (`store.js`), chat logic, dashboard handlers, validation
 - `public/app/`: dashboard used by both `/admin/` and `/portal/`
 - `public/chat/`, `public/login/`: finder chat page, caretaker sign-in page
 - `migrations/`: D1 schema migrations
@@ -31,23 +31,24 @@ npm run dev        # http://localhost:8788/admin/ (admin login bypassed locally 
 ```
 To try the caretaker portal locally: Admin → Caretakers → Add caretaker → open the login link it shows.
 
-## Hosting on Cloudflare Pages (from GitHub)
-1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick `omkardbz123/indie-tracker`.
-2. Project name `indie-tracker` · Production branch `main` · Framework preset **None** · Build command *(empty)* · Build output directory `public`.
-3. The D1 binding (`DB` → database `indie-tracker`) comes from `wrangler.toml`. Every push to `main` redeploys.
-   The Pages project must be in the same Cloudflare account as the database (omkardbz123@gmail.com's Account).
+## Hosting on Cloudflare (Worker, deployed from GitHub)
+1. Cloudflare dashboard (omkardbz123@gmail.com's Account) → **Workers & Pages → Create → Import a repository** → `omkardbz123/indie-tracker`.
+2. Project name `indie-tracker` · Build command *(empty)* · Deploy command `npx wrangler deploy`.
+3. The D1 binding (`DB` → database `indie-tracker`) and static files come from `wrangler.toml`. Every push to `main` redeploys.
 4. Database changes: add a file in `migrations/`, then run `npm run db:migrate:remote`.
+Manual deploy from this computer: `npm run deploy`.
 
 ## Admin login (Cloudflare Access): required before `/admin` works in production
 Until this is set up, `/api/admin/*` returns 401 on the live site (by design).
 1. Cloudflare dashboard → **Zero Trust**. The first time, pick a team name and the Free plan.
-2. Access → Applications → **Add an application → Self-hosted**. Add two public hostnames on `indie-tracker.pages.dev`: path `admin` and path `api/admin`.
+2. Access → Applications → **Add an application → Self-hosted**. Add two public hostnames on the site's address (e.g. `indie-tracker.<your-subdomain>.workers.dev`, or your custom domain): path `admin` and path `api/admin`.
+   Don't use the Worker's one-click "Enable Cloudflare Access" toggle: it locks the whole site, including the public pages.
    **Don't** protect `/portal`, `/api/my`, `/login`, `/chat` or `/d`. Caretakers and finders use those.
 3. Policy: **Allow**, Include → Emails → the admins' addresses. Login method: One-time PIN.
 4. Copy the application's **AUD tag**, then:
    ```bash
-   npx wrangler pages secret put ACCESS_TEAM_DOMAIN --project-name indie-tracker   # e.g. yourteam.cloudflareaccess.com
-   npx wrangler pages secret put ACCESS_AUD --project-name indie-tracker
+   npx wrangler secret put ACCESS_TEAM_DOMAIN   # e.g. yourteam.cloudflareaccess.com
+   npx wrangler secret put ACCESS_AUD
    ```
 **Never set `DEV_BYPASS` in production.**
 

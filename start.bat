@@ -39,5 +39,5 @@ echo.
 
 if not defined NO_BROWSER start "" "http://localhost:%PORT%/admin/"
 
-call npx wrangler pages dev public --binding DEV_BYPASS=1 --port %PORT%
+call npx wrangler dev --var DEV_BYPASS:1 --port %PORT%
 pause
