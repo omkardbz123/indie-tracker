@@ -1,0 +1,18 @@
+name = "indie-tracker"
+pages_build_output_dir = "public"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dog-qr-id"
+database_id = "02774996-a272-45bc-946a-7ed02479b50e"
+migrations_dir = "migrations"
+
+# Photo storage (R2) is not set up yet. Photo upload stays hidden until this is enabled:
+#   npx wrangler r2 bucket create dog-photos
+# then uncomment:
+# [[r2_buckets]]
+# binding = "PHOTOS"
+# bucket_name = "dog-photos"
+
+# Set ACCESS_TEAM_DOMAIN and ACCESS_AUD as Pages secrets (see README).

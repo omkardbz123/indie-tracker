@@ -1,0 +1,14 @@
+{
+  "name": "indie-tracker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public --binding DEV_BYPASS=1",
+    "db:migrate:local": "wrangler d1 migrations apply dog-qr-id --local",
+    "db:migrate:remote": "wrangler d1 migrations apply dog-qr-id --remote"
+  },
+  "devDependencies": {
+    "qrcode-generator": "^2.0.4",
+    "wrangler": "^4"
+  }
+}

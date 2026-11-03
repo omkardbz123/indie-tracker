@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffffff">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/favicon.svg">
+<title>Send a message · Dog ID</title>
+<style>
+:root{--text:#111827;--text-2:#374151;--muted:#6b7280;--border:#e5e7eb;--border-2:#d1d5db;--soft:#f3f4f6;--red:#b91c1c}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#f3f4f6;color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+.page{max-width:560px;margin:0 auto;min-height:100vh;background:#fff;display:flex;flex-direction:column}
+@media (min-width:561px){.page{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border)}
+.wordmark{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--text);text-decoration:none}
+.mark{width:22px;height:22px;border-radius:5px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.back{font-size:14px;color:var(--text-2);text-decoration:none}.back:hover{text-decoration:underline}
+.intro{padding:20px 20px 16px}
+.label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-size:24px;line-height:1.25;font-weight:700;margin:6px 0 0;overflow-wrap:anywhere}
+.callout{margin:0 20px;padding:12px 14px;border-left:3px solid var(--text);background:#f9fafb;color:var(--text-2);font-size:15px}
+.form{padding:20px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.quick button{height:34px;padding:0 12px;border:1px solid var(--border-2);border-radius:999px;background:#fff;color:var(--text);font:inherit;font-size:14px;cursor:pointer}
+.quick button:hover{background:#f9fafb}
+label.field{display:block;margin-bottom:14px}
+label.field>span{display:block;font-size:14px;font-weight:500;color:var(--text-2);margin-bottom:6px}
+input[type=text],textarea{width:100%;border:1px solid var(--border-2);border-radius:8px;padding:10px 12px;font:inherit;color:var(--text);background:#fff}
+textarea{resize:vertical;min-height:110px;line-height:1.5}
+input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.check{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:15px;cursor:pointer}
+.check input{width:18px;height:18px;margin:0;accent-color:var(--text)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border:0;border-radius:8px;background:var(--text);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:default}
+.err{color:var(--red);font-size:14px;font-weight:500;margin:10px 0 0}.err:empty{display:none}
+.thread{flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
+.msg .who{display:block;font-size:12px;font-weight:600;margin-bottom:2px;opacity:.75}
+.msg .when{display:block;font-size:11px;margin-top:4px;opacity:.6}
+.msg.me{align-self:flex-end;background:var(--text);color:#fff;border-bottom-right-radius:3px}
+.msg.them{align-self:flex-start;background:var(--soft);border-bottom-left-radius:3px}
+.msg a{color:inherit}
+.waiting{color:var(--muted);font-size:14px;text-align:center;margin:8px 0}
+.save{margin:0 20px 12px;font-size:13px;color:var(--muted);text-align:center}
+.save button{border:0;background:none;color:var(--text);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+.composer{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--border);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end}
+.composer textarea{min-height:44px;max-height:140px;height:44px;padding:10px 12px}
+.composer .send{width:auto;height:44px;padding:0 18px;flex:none}
+.loc{flex:none;width:44px;height:44px;border:1px solid var(--border-2);border-radius:8px;background:#fff;color:var(--text);display:grid;place-items:center;cursor:pointer}
+.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.notice{padding:48px 24px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <a class="wordmark" href="/"><span class="mark">D</span>Dog ID</a>
+    <a class="back" id="back" href="/">Back to profile</a>
+  </header>
+
+  <div id="loading" class="notice">Loading…</div>
+  <div id="missing" class="notice" hidden>This dog isn't registered, or the link is incomplete.</div>
+
+  <div id="main" hidden>
+    <div class="intro">
+      <p class="label">Anonymous message</p>
+      <h1 id="title">Message the caretaker</h1>
+    </div>
+    <p class="callout" id="privacy"></p>
+  </div>
+
+  <form class="form" id="start" hidden novalidate>
+    <div class="quick" id="quick">
+      <button type="button">I found this dog</button>
+      <button type="button">This dog looks lost</button>
+      <button type="button">This dog looks injured or unwell</button>
+    </div>
+    <label class="field"><span>Message</span><textarea id="body" maxlength="1000" placeholder="Where did you see the dog? Is it safe with you?"></textarea></label>
+    <label class="field"><span>Your name (optional)</span><input type="text" id="fname" maxlength="40" autocomplete="off" placeholder="So they know what to call you"></label>
+    <label class="check"><input type="checkbox" id="withLoc">Include my current location</label>
+    <button class="btn" id="send" type="submit">Send message</button>
+    <p class="err" id="err"></p>
+  </form>
+
+  <div id="convo" hidden style="display:flex;flex-direction:column;flex:1">
+    <div class="thread" id="thread"></div>
+    <p class="save">Replies appear here. To come back later, keep this page open or <button type="button" id="copyLink">copy your private link</button>.</p>
+    <form class="composer" id="composer" novalidate>
+      <button type="button" class="loc" id="locBtn" title="Send my location" aria-label="Send my location"><svg class="i" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></button>
+      <textarea id="reply" maxlength="1000" rows="1" placeholder="Write a message…" aria-label="Message"></textarea>
+      <button class="btn send" type="submit">Send</button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.getElementById(s); };
+  var params = new URLSearchParams(location.search);
+  var dogId = params.get("dog") || "";
+  var conv = null; // { id, token }
+  var dog = null;
+  var lastCount = -1;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  // Only map links become clickable, so nobody can slip a phishing link into the thread.
+  function linkify(s) {
+    return esc(s).replace(/https:\/\/maps\.google\.com\/\?q=-?[\d.]+,-?[\d.]+/g, function (u) {
+      return '<a href="' + u + '" target="_blank" rel="noopener">View location on map</a>';
+    });
+  }
+  function when(ts) {
+    var d = new Date(ts.replace(" ", "T") + "Z");
+    return d.toLocaleString([], { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  }
+  function store(key, value) {
+    try {
+      if (value === undefined) return JSON.parse(localStorage.getItem(key) || "null");
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) { return null; }
+  }
+  function api(path, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({ "content-type": "application/json" }, opts.headers || {});
+    if (conv) opts.headers["X-Chat-Token"] = conv.token;
+    return fetch(path, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        if (!r.ok) { var e = new Error(data.error || "Something went wrong. Please try again."); e.status = r.status; throw e; }
+        return data;
+      });
+    });
+  }
+  function getLocation() {
+    return new Promise(function (resolve) {
+      if (!navigator.geolocation) return resolve("");
+      navigator.geolocation.getCurrentPosition(function (p) {
+        resolve("My location: https://maps.google.com/?q=" + p.coords.latitude.toFixed(5) + "," + p.coords.longitude.toFixed(5));
+      }, function () { resolve(""); }, { timeout: 10000, maximumAge: 60000 });
+    });
+  }
+
+  function showDog(d) {
+    dog = d;
+    var role = d.dog_type === "community" ? "caretaker" : "owner";
+    document.title = "Message about " + d.name + " · Dog ID";
+    $("title").textContent = "Message the " + role + " of " + d.name;
+    $("privacy").textContent = "Your message goes straight to " + d.name + "'s " + role +
+      ". Neither of you can see the other's phone number. Please don't share personal details unless you want to.";
+    $("back").href = "/d/" + d.id;
+    $("loading").hidden = true;
+    $("main").hidden = false;
+  }
+
+  function renderThread(data) {
+    if (data.messages.length === lastCount) return;
+    var atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
+    lastCount = data.messages.length;
+    var role = dog && dog.dog_type === "community" ? "Caretaker" : "Owner";
+    var html = data.messages.map(function (m) {
+      var mine = m.sender === "finder";
+      var who = mine ? "You" : m.sender === "admin" ? "Volunteer team" : role;
+      return '<div class="msg ' + (mine ? "me" : "them") + '"><span class="who">' + who + "</span>" +
+        linkify(m.body) + '<span class="when">' + when(m.created_at) + "</span></div>";
+    }).join("");
+    var last = data.messages[data.messages.length - 1];
+    if (last && last.sender === "finder") html += '<p class="waiting">Waiting for a reply. You can leave this page open.</p>';
+    $("thread").innerHTML = html;
+    if (atBottom) window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function refresh() {
+    if (!conv || document.hidden) return;
+    api("/api/chat/" + conv.id).then(function (data) {
+      if (!dog) showDog(data.dog);
+      renderThread(data);
+    }).catch(function (e) {
+      if (e.status === 404) { conv = null; store("dogid-chat:" + dogId, null); location.reload(); }
+    });
+  }
+
+  function openConversation() {
+    $("start").hidden = true;
+    $("convo").hidden = false;
+    refresh();
+    setInterval(refresh, 5000);
+    document.addEventListener("visibilitychange", refresh);
+  }
+
+  // A private link (#<conversationId>.<token>) lets the finder come back from another device.
+  var fromHash = location.hash.slice(1).split(".");
+  if (fromHash.length === 2 && fromHash[0] && fromHash[1]) {
+    conv = { id: fromHash[0], token: fromHash[1] };
+    history.replaceState(null, "", location.pathname + location.search);
+    if (dogId) store("dogid-chat:" + dogId, conv);
+  } else if (dogId) {
+    conv = store("dogid-chat:" + dogId);
+  }
+
+  if (!/^[A-Za-z0-9]{4,16}$/.test(dogId)) {
+    $("loading").hidden = true;
+    $("missing").hidden = false;
+    return;
+  }
+
+  fetch("/api/dog/" + dogId).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) {
+    showDog(d);
+    if (conv) openConversation(); else $("start").hidden = false;
+  }).catch(function () {
+    $("loading").hidden = true;
+    $("missing").hidden = false;
+  });
+
+  $("quick").onclick = function (e) {
+    if (e.target.tagName !== "BUTTON") return;
+    var body = $("body");
+    body.value = (body.value ? body.value.trim() + "\n" : "") + e.target.textContent + ". ";
+    body.focus();
+  };
+
+  $("start").onsubmit = function (e) {
+    e.preventDefault();
+    var text = $("body").value.trim();
+    if (!text) { $("err").textContent = "Write a message first."; return; }
+    var btn = $("send");
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    $("err").textContent = "";
+    ($("withLoc").checked ? getLocation() : Promise.resolve("")).then(function (loc) {
+      return api("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ dog_id: dogId, name: $("fname").value, body: loc ? text + "\n\n" + loc : text }),
+      });
+    }).then(function (r) {
+      conv = { id: r.id, token: r.token };
+      store("dogid-chat:" + dogId, conv);
+      openConversation();
+    }).catch(function (err) {
+      $("err").textContent = err.message;
+      btn.disabled = false;
+      btn.textContent = "Send message";
+    });
+  };
+
+  function send(text) {
+    return api("/api/chat/" + conv.id + "/messages", { method: "POST", body: JSON.stringify({ body: text }) })
+      .then(function () { lastCount = -1; refresh(); window.scrollTo(0, document.body.scrollHeight); });
+  }
+
+  $("composer").onsubmit = function (e) {
+    e.preventDefault();
+    var box = $("reply");
+    var text = box.value.trim();
+    if (!text) return;
+    box.disabled = true;
+    send(text).then(function () { box.value = ""; }).catch(function (err) { alert(err.message); })
+      .then(function () { box.disabled = false; box.focus(); });
+  };
+
+  $("locBtn").onclick = function () {
+    var b = this;
+    b.disabled = true;
+    getLocation().then(function (loc) {
+      if (!loc) { alert("Couldn't get your location. Check that location access is allowed."); return; }
+      return send(loc);
+    }).catch(function (err) { alert(err.message); }).then(function () { b.disabled = false; });
+  };
+
+  $("copyLink").onclick = function () {
+    var link = location.origin + "/chat/?dog=" + dogId + "#" + conv.id + "." + conv.token;
+    var done = function () { $("copyLink").textContent = "link copied. Keep it private"; };
+    if (navigator.clipboard) navigator.clipboard.writeText(link).then(done, function () { prompt("Copy this private link:", link); });
+    else prompt("Copy this private link:", link);
+  };
+})();
+</script>
+</body>
+</html>
