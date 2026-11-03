@@ -5,7 +5,7 @@ import { json, readJson, sameOrigin, sha256 } from "./util.js";
 
 const COOKIE = "dogid_admin";
 const PATH = "/api/admin";
-const MIN_PASSWORD_LENGTH = 12;
+const MIN_PASSWORD_LENGTH = 8;
 const MAX_FAILURES = 10; // per connection per 15 minutes
 
 const sessionToken = (env) => sha256(`admin-session-v1:${env.ADMIN_PASSWORD}`);
@@ -34,7 +34,10 @@ export async function adminFromCookie(request, env) {
 export async function adminLogin({ request, env }) {
   if (!sameOrigin(request)) return json({ error: "Bad origin" }, 403);
   if (!passwordConfigured(env)) {
-    return json({ error: "No admin password is set yet. Run: npx wrangler secret put ADMIN_PASSWORD" }, 503);
+    const error = env.ADMIN_PASSWORD
+      ? `The admin password on the server is too short. Set one with at least ${MIN_PASSWORD_LENGTH} characters: npx wrangler secret put ADMIN_PASSWORD`
+      : "No admin password is set yet. Run: npx wrangler secret put ADMIN_PASSWORD";
+    return json({ error }, 503);
   }
   const ipHash = await sha256(`admin-ip:${request.headers.get("CF-Connecting-IP") || "local"}`);
   const recent = await env.DB.prepare(

@@ -44,7 +44,7 @@ Set or change it from this folder; changing it signs every admin out:
 ```bash
 npx wrangler secret put ADMIN_PASSWORD
 ```
-It must be at least 12 characters. After 10 wrong attempts from one connection, sign-in is blocked for 15 minutes.
+It must be at least 8 characters. Use a longer one before real data goes in. After 10 wrong attempts from one connection, sign-in is blocked for 15 minutes.
 
 ## Optional: Cloudflare Access for admins
 Access (an email one-time code) can be used instead of, or alongside, the password.
