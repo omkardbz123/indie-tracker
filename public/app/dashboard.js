@@ -49,7 +49,7 @@ document.getElementById("app").innerHTML = `
 <header class="topbar">
   <div class="topbar-in">
     <a class="wordmark" href="#dogs"><span class="mark">D</span>Dog ID <span class="wordmark-sub">${IS_ADMIN ? "Admin" : "Caretaker"}</span></a>
-    <div class="topbar-right"><span class="me" id="me"></span>${IS_ADMIN ? "" : `<button class="btn btn-sm" id="logout" type="button">Sign out</button>`}</div>
+    <div class="topbar-right"><span class="me" id="me"></span><button class="btn btn-sm" id="logout" type="button" hidden>Sign out</button></div>
   </div>
   <nav class="tabs"><div class="tabs-in">
     <a href="#dogs" data-tab="dogs">${IS_ADMIN ? "Dogs" : "My dogs"}</a>
@@ -238,9 +238,40 @@ const api = async (path, opts = {}) => {
 function showSignedOut() {
   if (signedOut) return;
   signedOut = true;
-  $("#main").innerHTML = IS_ADMIN
-    ? `<div class="panel"><div class="state"><h3>You're not signed in</h3><p>Reload the page to sign in with your admin email.</p></div></div>`
-    : `<div class="panel"><div class="state"><h3>You're signed out</h3><p>Open your personal login link again, or ask an admin to send you a new one.</p></div></div>`;
+  document.querySelector(".tabs").hidden = true;
+  if (!IS_ADMIN) {
+    $("#main").innerHTML = `<div class="panel"><div class="state"><h3>You're signed out</h3><p>Open your personal login link again, or ask an admin to send you a new one.</p></div></div>`;
+    return;
+  }
+  $("#main").innerHTML = `
+    <form class="panel signin" id="signin" novalidate>
+      <h1>Admin sign in</h1>
+      <p class="sub">Enter the admin password to manage dogs, caretakers and messages.</p>
+      <label class="field"><span>Password</span><input type="password" id="adminPassword" autocomplete="current-password" required></label>
+      <p class="form-error" id="signinErr" role="alert"></p>
+      <button class="btn btn-primary" type="submit" id="signinBtn">Sign in</button>
+      <p class="sub signin-alt">Caretakers don't use this page. They sign in with the personal link an admin sends them.</p>
+    </form>`;
+  $("#adminPassword").focus();
+  $("#signin").onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = $("#signinBtn");
+    btn.disabled = true;
+    $("#signinErr").textContent = "";
+    try {
+      const res = await fetch("/api/auth/admin", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ password: $("#adminPassword").value }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Couldn't sign in.");
+      location.reload();
+    } catch (err) {
+      $("#signinErr").textContent = err.message;
+      btn.disabled = false;
+    }
+  };
 }
 
 let toastTimer;
@@ -854,18 +885,18 @@ if (IS_ADMIN) {
 }
 
 // ---------- start ----------
-if (!IS_ADMIN) {
-  $("#logout").onclick = async () => {
-    await fetch("/api/my/logout", { method: "POST" }).catch(() => {});
-    location.href = "/login/?out=1";
-  };
-}
+$("#logout").onclick = async () => {
+  await fetch(`${API}/logout`, { method: "POST" }).catch(() => {});
+  if (IS_ADMIN) location.reload();
+  else location.href = "/login/?out=1";
+};
 
 (async () => {
   try {
     const config = await api("/config");
     photosEnabled = config.photos;
     $("#me").textContent = config.me.email || config.me.name || "";
+    $("#logout").hidden = !config.can_sign_out;
   } catch {
     return;
   }

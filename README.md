@@ -38,8 +38,16 @@ To try the caretaker portal locally: Admin → Caretakers → Add caretaker → 
 4. Database changes: add a file in `migrations/`, then run `npm run db:migrate:remote`.
 Manual deploy from this computer: `npm run deploy`.
 
-## Admin login (Cloudflare Access): required before `/admin` works in production
-Until this is set up, `/api/admin/*` returns 401 on the live site (by design).
+## Admin sign-in
+Admins sign in at `/admin/` with a password stored as a Worker secret (never in the code or on GitHub).
+Set or change it from this folder; changing it signs every admin out:
+```bash
+npx wrangler secret put ADMIN_PASSWORD
+```
+It must be at least 12 characters. After 10 wrong attempts from one connection, sign-in is blocked for 15 minutes.
+
+## Optional: Cloudflare Access for admins
+Access (an email one-time code) can be used instead of, or alongside, the password.
 1. Cloudflare dashboard → **Zero Trust**. The first time, pick a team name and the Free plan.
 2. Access → Applications → **Add an application → Self-hosted**. Add two public hostnames on the site's address (e.g. `indie-tracker.<your-subdomain>.workers.dev`, or your custom domain): path `admin` and path `api/admin`.
    Don't use the Worker's one-click "Enable Cloudflare Access" toggle: it locks the whole site, including the public pages.

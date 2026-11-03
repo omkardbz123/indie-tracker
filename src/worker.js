@@ -1,5 +1,6 @@
 // Worker entry. Static files in /public are served by Cloudflare before this runs;
 // everything else (profile pages and the API) is routed here.
+import { adminLogin, adminLogout } from "./lib/adminAuth.js";
 import { config, dogs, inbox } from "./lib/handlers.js";
 import { logout, requireAdmin, requireCaretaker } from "./lib/middleware.js";
 import { json } from "./lib/util.js";
@@ -30,8 +31,10 @@ const ROUTES = [
   ["GET", "/api/chat/:id", pub.chatRead],
   ["POST", "/api/chat/:id/messages", pub.chatSend],
   ["POST", "/api/auth/login", pub.login],
+  ["POST", "/api/auth/admin", adminLogin],
 
   ...dashboardRoutes("/api/admin", requireAdmin),
+  ["POST", "/api/admin/logout", adminLogout, requireAdmin],
   ["GET", "/api/admin/caretakers", caretakers.list, requireAdmin],
   ["POST", "/api/admin/caretakers", caretakers.create, requireAdmin],
   ["PUT", "/api/admin/caretakers/:id", caretakers.update, requireAdmin],

@@ -132,6 +132,14 @@ input[type="checkbox"] { width: 16px; height: 16px; margin: 0; accent-color: var
 .state p { margin: 0 0 16px; }
 .state p:last-child { margin: 0; }
 
+/* Admin sign in */
+.signin { max-width: 400px; margin: 40px auto 0; padding: 28px; }
+.signin h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.signin > .sub { margin-bottom: 20px; }
+.signin .btn { width: 100%; height: 40px; margin-top: 4px; }
+.signin .form-error { margin: 0 0 12px; }
+.signin .signin-alt { margin: 18px 0 0; font-size: 12px; }
+
 /* Messages */
 .inbox { display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 230px); min-height: 440px; }
 .conv-list { border-right: 1px solid var(--border); overflow-y: auto; }

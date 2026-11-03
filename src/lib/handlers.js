@@ -73,4 +73,6 @@ export const config = ({ env, data }) =>
     role: data.scope.role,
     photos: !!env.PHOTOS,
     me: data.scope.role === "admin" ? { email: data.scope.email } : { name: data.scope.name },
+    // Access sessions are signed out through Cloudflare, so only password sessions get a sign-out button.
+    can_sign_out: data.scope.role !== "admin" || !!data.scope.signOut,
   });
